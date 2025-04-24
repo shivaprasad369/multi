@@ -20,7 +20,7 @@ export default function Categories({data}:CategoriesProps) {
           isNavigationHovered={false}
           />
         </div>
-      )}
+      // )}
       </div>
     </div>
   )
