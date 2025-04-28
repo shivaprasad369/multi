@@ -1,6 +1,6 @@
 import React from 'react'
-import { Category } from '../../../../payload-types'
 import configPromise from '../../../../payload.config'
+import { Category } from '../../../../payload-types'
 import { getPayload } from 'payload'
 
 import Navbar from './navbar'
