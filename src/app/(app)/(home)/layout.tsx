@@ -18,6 +18,9 @@ export default async function Layout({children}: props) {
     collection: "categories",
     depth: 1,
     pagination:false,
+   sort: "name",
+   
+
     where: {
       parent: {
         exists: false,

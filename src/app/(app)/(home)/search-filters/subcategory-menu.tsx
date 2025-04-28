@@ -16,7 +16,7 @@ export default function SubcategoryMenu({
 
 }:Props) 
 {
-    if(!isOpen || !category.subcategories || !category?.subcategories?.length===0){
+    if(!isOpen || !category.subcategories || !category?.subcategories?.docs?.length){
         return null
     }
     const backgroundColor=category?.color ||"#F5F5F5";
@@ -37,6 +37,7 @@ export default function SubcategoryMenu({
         shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-[2px] -translate-y-[2px]
         `}>
          <div>
+          {/* @ts-ignore */}
             {category?.subCategories?.map((subcategory:any)=>
                <Link 
                key={subcategory.slug}

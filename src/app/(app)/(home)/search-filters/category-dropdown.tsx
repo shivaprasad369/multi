@@ -27,7 +27,7 @@ const onMouseLeave=()=> setIsOpen(false)
 
 const dropdownPosition=getDropdownPosition()
   return (
-    <div className='relative'
+    <div className='relative pb-[2rem]'
     
     ref={dropdownRef}
     onMouseEnter={onMouseEnter}
@@ -41,6 +41,9 @@ const dropdownPosition=getDropdownPosition()
         hover:border-primary text-black
    `,
         isActive && !isNavigationHovered && 'bg-white border-primary',
+        isOpen && `bg-white border-primary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+       -translate-x-[4px] -translate-y-[4px] 
+        transition-all `
     )}
     >
       {category?.name}

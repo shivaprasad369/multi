@@ -1,8 +1,5 @@
-
-
-import { getPayload } from 'payload'
+import { getPayload } from "payload"
 import config from '../payload.config'
-
 const categories = [
     {
       name: "All",
@@ -138,36 +135,64 @@ const categories = [
       ],
     },
   ]
+const seed = async () => {
+    const payload = getPayload({ config });
+  
+    for (const category of categories) {
+      const existingParent = await (await payload).find({
+        collection: 'categories',
+        where: {
+          slug: {
+            equals: category.slug,
+          },
+        },
+      });
+  
+      let parentCategory;
+  
+      if (existingParent.docs.length === 0) {
+        parentCategory = await (await payload).create({
+          collection: 'categories',
+          data: {
+            name: category.name,
+            slug: category.slug,
+            color: category.color,
+            parent: null,
+          },
+        });
+      } else {
+        parentCategory = existingParent.docs[0];
+      }
+  
+      for (const subcategory of category.subcategories || []) {
+        const existingSub = await (await payload).find({
+          collection: 'categories',
+          where: {
+            slug: {
+              equals: subcategory.slug,
+            },
+          },
+        });
+  
+        if (existingSub.docs.length === 0) {
+          await (await payload).create({
+            collection: 'categories',
+            data: {
+              name: subcategory.name,
+              slug: subcategory.slug,
+              parent: parentCategory.id,
+            },
+          });
+        }
+      }
+    }
+  };
+  try{
 
-const seed=async()=>{
-    const payload=await getPayload({config})
-    categories.forEach(async(category)=>{
-        const parentCategpry=  await payload.create({
-                collection:'categories',
-                data:{
-                    name:category.name,
-                    slug:category.slug,
-                    color:category.color,
-                    subcategories:category.subcategories
-                }
-            })
-            //subcategory
-            if(category.subcategories){
-                category.subcategories.forEach(async(subcategory)=>{
-                    await payload.create({
-                        collection:'categories',
-                        data:{
-                            name:subcategory.name,
-                            slug:subcategory.slug,
-                            parent:parentCategpry.id
-                        }
-                    })
-                })
-            }
-
-       
-    })
-}
-
-await seed();
-process.exit(0);
+      await seed()
+      process.exit(0)
+  }
+    catch(e){
+        console.log(e)
+        process.exit(1)
+    }
