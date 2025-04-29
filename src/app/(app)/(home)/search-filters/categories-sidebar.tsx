@@ -1,3 +1,4 @@
+"use client"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import React from 'react'
 import { Category } from '../../../../../payload-types'
@@ -5,15 +6,20 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRightIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useTRPC } from '@/trpc/client'
+import { useQuery } from '@tanstack/react-query'
+import { CategoriesGetManyOutput } from '@/modules/categories/types'
  interface Props{
     open:boolean,
     onOpenChange:(open:boolean)=>void,
-    data:Category[]
+    // data:Category[]
 }
-export default function CategoriesSidebar({open,onOpenChange,data}:Props) {
-    const [parentCategories,setParentCategories]=React.useState<Category[] | null>(null)
-    const [selectedCategory,setSelectedCategory]=React.useState<Category  | null>(null)
+export default function CategoriesSidebar({open,onOpenChange}:Props) {
+    const [parentCategories,setParentCategories]=React.useState<CategoriesGetManyOutput | null>(null)
+    const [selectedCategory,setSelectedCategory]=React.useState<CategoriesGetManyOutput[1]  | null>(null)
+    const trcp=useTRPC()
  const router = useRouter()
+ const {data}=useQuery(trcp.categories.getMany.queryOptions())
 
     const correctVategory=parentCategories??data??[]
 
@@ -24,7 +30,7 @@ export default function CategoriesSidebar({open,onOpenChange,data}:Props) {
        
     }
 
- const handleCategoryClick=(category:Category)=>{
+ const handleCategoryClick=(category:CategoriesGetManyOutput[1])=>{
     //@ts-ignore
     if(category.subcategories && category.subCategories?.length>0){
         //@ts-ignore
@@ -79,7 +85,7 @@ const backgroundColor=selectedCategory?.color || "#F5F5F5"
             </button>
         )
     }
-        {correctVategory?.map((category:Category)=>(
+        {correctVategory?.map((category:CategoriesGetManyOutput[1])=>(
             <div key={category.id}>
                 <button
                 

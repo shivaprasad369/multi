@@ -6,20 +6,22 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { ListFilterIcon } from 'lucide-react'
 import CategoriesSidebar from './categories-sidebar'
-
-interface CategoriesProps {
-  data: Category[]
+import { useTRPC } from '@/trpc/client'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { CategoriesGetManyOutput } from '@/modules/categories/types'
+interface Props{
+  data:CategoriesGetManyOutput
 }
-
-export default function Categories({ data }: CategoriesProps) {
+export default function Categories() {
   const containerRef = useRef<HTMLDivElement>(null)
   const measureRef = useRef<HTMLDivElement>(null)
   const viewAllRef = useRef<HTMLDivElement>(null)
-
   const [visibleCount, setVisibleCount] = useState(0)
   const [isAnyHovered, setIsAnyHovered] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-
+  
+  const trpc = useTRPC();
+  const {data} = useSuspenseQuery(trpc.categories.getMany.queryOptions());
   const activeCategory = 'all'
   const activeCategoryIndex = data?.findIndex((category) => category.slug === activeCategory)
   const isActiveCategoryHidden = activeCategoryIndex !== -1 && activeCategoryIndex >= visibleCount
@@ -70,7 +72,7 @@ export default function Categories({ data }: CategoriesProps) {
   <CategoriesSidebar
   open={isSidebarOpen}
   onOpenChange={setIsSidebarOpen}
-  data={data}
+  // data={data}
 />
       }
       {/* measure width */}
