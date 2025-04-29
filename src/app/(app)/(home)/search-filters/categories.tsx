@@ -8,10 +8,7 @@ import { ListFilterIcon } from 'lucide-react'
 import CategoriesSidebar from './categories-sidebar'
 import { useTRPC } from '@/trpc/client'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { CategoriesGetManyOutput } from '@/modules/categories/types'
-interface Props{
-  data:CategoriesGetManyOutput
-}
+
 export default function Categories() {
   const containerRef = useRef<HTMLDivElement>(null)
   const measureRef = useRef<HTMLDivElement>(null)
